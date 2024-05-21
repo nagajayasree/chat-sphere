@@ -17,7 +17,7 @@ export const SignUp: React.FC<SignUpProps> = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [notice, setNotice] = useState('');
 
-  const onSignUp = async (e: Event) => {
+  const onSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     // createUserWithEmailAndPassword(auth, email, password)
