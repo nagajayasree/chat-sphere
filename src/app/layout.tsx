@@ -18,12 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AppRouterCacheProvider>
-        <AuthProvider>
-          <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <AuthProvider>
             <CssBaseline />
             <body>{children}</body>
-          </ThemeProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </AppRouterCacheProvider>
     </html>
   );

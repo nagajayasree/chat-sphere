@@ -2,28 +2,26 @@
 
 import React, { useState } from 'react';
 import { Button, TextField } from '@mui/material';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/src/firebase/firebase';
+import { useAuth } from '@/src/context/authContext';
 
-interface SignUpProps {
-  email: string;
-  password: string;
-  onClickLogin?: (e: React.MouseEvent) => void;
-}
-
-export const SignUp: React.FC<SignUpProps> = () => {
+export const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [notice, setNotice] = useState('');
 
+  const { onUserSignUp }: any = useAuth();
+
   const onSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (password === confirmPassword) {
+    if (password !== confirmPassword) {
+      setNotice('Passwords do not match.');
+      return;
+    } else {
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        console.log(auth.currentUser);
+        await onUserSignUp({ email, password });
+        setNotice('User created successfully!');
       } catch (err) {
         console.log(err);
         setNotice('Sorry, something went wrong. Please try again.');
@@ -61,9 +59,8 @@ export const SignUp: React.FC<SignUpProps> = () => {
           onChange={(e) => {
             setConfirmPassword(e.target.value);
           }}
-        />
-        {notice}
-
+          />
+          {notice}
         <Button onClick={onSignUp} variant="contained" color="primary">
           Sign Up
         </Button>

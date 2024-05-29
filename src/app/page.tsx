@@ -7,8 +7,8 @@ export default function Home() {
       <div>
         <p>Hello, I'm ChatSphere!</p>
       </div>
-      <SignIn email={''} password={''} />
-      <SignUp email={''} password={''} />
+      <SignUp />
+      <SignIn />
     </main>
   );
 }

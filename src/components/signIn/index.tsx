@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/src/firebase/firebase';
+import { auth } from '@/src/firebase/index';
 
 interface SignInProps {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
 }
 
 export const SignIn: React.FC<SignInProps> = () => {

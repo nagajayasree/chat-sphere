@@ -1,12 +1,12 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { auth } from '@/src/firebase/firebase';
+import { auth } from '@/src/firebase/index';
 
 interface UserProps {
   email: string;
@@ -15,38 +15,42 @@ interface UserProps {
 
 const AuthContext = createContext({});
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
-
 export default function AuthProvider({ children }: any) {
-  const [userInfo, setUserInfo] = useState<any>();
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUserInfo(user);
-    });
-
-    return unsubscribe;
-  }, []);
+  const [userInfo, setUserInfo] = useState<string | null>(null);
 
   const onUserSignUp = async ({ email, password }: UserProps) => {
-    createUserWithEmailAndPassword(auth, email, password);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error('Sign up error:', error);
+    }
   };
 
   const onUserSignIn = async ({ email, password }: UserProps) => {
-    signInWithEmailAndPassword(auth, email, password);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      if (auth.currentUser) {
+        setUserInfo(auth.currentUser.email);
+      }
+    } catch (error) {
+      console.error('Sign in error:', error);
+    }
   };
 
-  const onUserSignOut = () => {
-    return auth.signOut();
+  const onUserSignOut = async () => {
+    try {
+      await auth.signOut();
+      setUserInfo(null);
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
   };
 
   const getUser = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const uid = user.uid;
-        console.log(uid);
+        const userId = user.uid;
+        console.log(userId);
         // ...
       } else {
         // User is signed out
@@ -64,4 +68,8 @@ export default function AuthProvider({ children }: any) {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
 }
