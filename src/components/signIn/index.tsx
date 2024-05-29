@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Button, TextField } from '@mui/material';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/src/firebase/firebase';
 
 interface SignInProps {
@@ -14,7 +14,7 @@ export const SignIn: React.FC<SignInProps> = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onClickSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onClickSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -53,6 +53,7 @@ export const SignIn: React.FC<SignInProps> = () => {
         <Button onClick={onClickSignIn} variant="contained" color="primary">
           Sign In
         </Button>
+        {/* {auth.currentUser ? auth.currentUser?.email : ''} */}
       </div>
     </main>
   );

@@ -20,23 +20,12 @@ export const SignUp: React.FC<SignUpProps> = () => {
   const onSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    // createUserWithEmailAndPassword(auth, email, password)
-    //   .then((userCredential) => {
-    //     // S
-    //     const user = userCredential.user;
-    //     console.log(user);
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     console.log(errorCode, errorMessage);
-    //   });
-
     if (password === confirmPassword) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
         console.log(auth.currentUser);
-      } catch {
+      } catch (err) {
+        console.log(err);
         setNotice('Sorry, something went wrong. Please try again.');
       }
     }
