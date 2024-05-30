@@ -13,7 +13,7 @@ interface UserProps {
   password: string;
 }
 
-const AuthContext = createContext({});
+export const AuthContext = createContext({});
 
 export default function AuthProvider({ children }: any) {
   const [userInfo, setUserInfo] = useState<string | null>(null);

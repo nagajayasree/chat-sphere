@@ -59,11 +59,11 @@ export const SignUp: React.FC = () => {
           onChange={(e) => {
             setConfirmPassword(e.target.value);
           }}
-          />
-          {notice}
+        />
         <Button onClick={onSignUp} variant="contained" color="primary">
           Sign Up
         </Button>
+        {notice}
       </div>
     </main>
   );

@@ -2,30 +2,24 @@
 
 import React, { useState } from 'react';
 import { Button, TextField } from '@mui/material';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/src/firebase/index';
+import { useAuth } from '@/src/context/authContext';
 
-interface SignInProps {
-  email?: string;
-  password?: string;
-}
-
-export const SignIn: React.FC<SignInProps> = () => {
+export const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [notice, setNotice] = useState('');
 
-  const onClickSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const { userInfo, onUserSignIn }: any = useAuth();
+
+  const onSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
+    try {
+      await onUserSignIn({ email, password });
+      setNotice('User logged in successfully!');
+    } catch (err) {
+      console.log(err);
+      setNotice('Sorry, something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -50,10 +44,11 @@ export const SignIn: React.FC<SignInProps> = () => {
             setPassword(e.target.value);
           }}
         />
-        <Button onClick={onClickSignIn} variant="contained" color="primary">
+        <Button onClick={onSignIn} variant="contained" color="primary">
           Sign In
         </Button>
-        {/* {auth.currentUser ? auth.currentUser?.email : ''} */}
+        {notice}
+        {userInfo}
       </div>
     </main>
   );
